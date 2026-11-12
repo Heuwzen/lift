@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Lift Today, look A</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Nunito:wght@500..900&display=swap" rel="stylesheet">
+<style>
+/* Look A, calm (Mora): a well-made paper notebook. Static mockup, 390 x 844. */
+:root{
+  --paper:#F6F4F0; --card:#FFFFFF; --line:#ECE6DF; --line-2:#DCD3C9;
+  --ink:#27221E; --ink-2:#4B433D; --muted:#7A7069; --faint:#A69C94;
+  --peach:#F9BD86; --terra:#EF9159; --grad:linear-gradient(135deg,#F9BD86 0%,#EF9159 100%);
+  --accent-ink:#B4561F; --on-accent:#3A2110; --wash:#FCEFE2; --wash-line:#F2D5BA;
+  --pain:#C2453A;
+  --shadow-card:0 1px 2px rgba(39,34,30,.04);
+  --shadow-float:0 10px 28px rgba(39,34,30,.10),0 1px 3px rgba(39,34,30,.06);
+  --r-card:20px; --r-panel:16px; --r-btn:14px;
+  --g:16px; --safe-top:47px; --safe-bottom:34px; --tab-h:49px; --dock-h:60px;
+  --display:"Fraunces",Georgia,serif; --ui:"Nunito",system-ui,sans-serif;
+  --x:0px;
+}
+@media (min-width:600px){:root{--x:calc(50vw - 195px)}}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--paper)}
+body{width:390px;margin:0 0 0 var(--x);background:var(--paper);color:var(--ink);font:600 16px/1.4 var(--ui);
+  -webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+button,output{font:inherit;color:inherit;background:none;border:0}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* iOS chrome (mockup only) */
+.status{position:fixed;top:0;left:var(--x);width:390px;height:var(--safe-top);z-index:60;background:var(--paper);
+  display:flex;align-items:center;justify-content:space-between;padding:4px 26px 0 44px;color:#000;font:600 17px/1 -apple-system,system-ui,sans-serif}
+.status .r{display:flex;gap:6px;align-items:center}
+.homebar{position:fixed;bottom:8px;left:calc(var(--x) + 128px);width:134px;height:5px;border-radius:3px;background:#1d1a17;z-index:70}
+
+/* compact title once scrolled */
+.mini{position:fixed;top:var(--safe-top);left:var(--x);width:390px;height:44px;z-index:55;background:var(--paper);
+  border-bottom:1px solid var(--line);display:none;align-items:center;justify-content:center}
+.mini b{font:600 18px/1 var(--display);font-variation-settings:"opsz" 24}
+.mini span{position:absolute;right:var(--g);font:700 13px/1 var(--ui);color:var(--muted)}
+.mini span:first-child{left:var(--g);right:auto}
+html.scrolled .mini{display:flex}
+
+main{padding:calc(var(--safe-top) + 4px) 0 calc(var(--safe-bottom) + var(--tab-h) + var(--dock-h) + 40px)}
+
+/* head */
+.head{padding:0 var(--g)}
+.meta{display:flex;justify-content:space-between;align-items:baseline;font:700 14px/1.2 var(--ui);color:var(--muted)}
+.title{display:flex;align-items:baseline;gap:12px;margin-top:6px}
+.title h1{font:600 40px/1 var(--display);font-variation-settings:"opsz" 144;letter-spacing:-.015em}
+.title em{font:italic 400 19px/1 var(--display);font-variation-settings:"opsz" 24;color:var(--ink-2)}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin:14px -4px 0}
+.day{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0 9px;border-radius:14px;border:1px solid transparent}
+.day b{font:700 12px/1 var(--ui);color:var(--muted)}
+.day span{font:800 12.5px/1.1 var(--ui);color:var(--ink-2);white-space:nowrap}
+.day.on{background:var(--card);border-color:var(--line);box-shadow:var(--shadow-card)}
+.day.on b{color:var(--accent-ink)}
+.day.on span{color:var(--ink)}
+.day.rest span{color:var(--muted);font-weight:700}
+.brief{margin-top:10px;padding:12px 15px 13px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-card)}
+.stage{display:flex;gap:9px;align-items:center;font:700 14px/1.3 var(--ui);color:var(--muted)}
+.stage svg{width:17px;height:17px;color:var(--accent-ink)}
+.stage b{color:var(--ink);font-weight:800}
+.daynote{margin-top:6px;font:italic 500 18px/1.28 var(--display);font-variation-settings:"opsz" 20;color:var(--ink)}
+
+/* exercise card */
+.ex{margin:12px var(--g) 0;background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);box-shadow:var(--shadow-card);padding:15px 15px 2px}
+.ex-head{display:flex;align-items:baseline;gap:9px}
+.ex-num{font:italic 500 19px/1 var(--display);color:var(--accent-ink);min-width:12px}
+.ex-name{font:600 21px/1.18 var(--display);font-variation-settings:"opsz" 28;letter-spacing:-.005em}
+.star{display:inline-flex;align-items:center;gap:4px;margin-left:2px;font:700 12px/1 var(--ui);color:var(--accent-ink);vertical-align:2px;white-space:nowrap}
+.star svg{width:12px;height:12px;fill:currentColor;stroke:none}
+.ex-sub{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 0 0 21px;min-height:22px}
+.target{font:800 16px/1 var(--ui);color:var(--ink);white-space:nowrap}
+.choice{display:inline-flex;height:46px;border-radius:999px;background:var(--paper);border:1px solid var(--line)}
+.choice button{position:relative;height:44px;padding:0 17px;border-radius:999px;font:700 14px/1 var(--ui);color:var(--muted)}
+.choice button span{position:relative}
+.choice button.on{color:var(--ink)}
+.choice button.on::before{content:"";position:absolute;inset:2px;border-radius:999px;background:var(--card);box-shadow:0 0 0 1px var(--line-2),0 1px 2px rgba(39,34,30,.08)}
+.last{margin:10px 0 0 21px;font:700 14px/1.35 var(--ui);color:var(--ink-2)}
+.last span{color:var(--muted);margin-right:6px}
+.last i{font-style:normal;white-space:nowrap}
+.coach{display:flex;gap:9px;align-items:flex-start;margin:8px 0 0 21px;font:800 16px/1.35 var(--ui);color:var(--ink)}
+.cue{flex:none;width:22px;height:22px;margin:0 0 0 -31px;border-radius:50%;background:var(--wash);color:var(--accent-ink);display:grid;place-items:center}
+.cue svg{width:14px;height:14px;stroke-width:2.6}
+
+/* set table */
+.sets{margin-top:10px}
+.cols,.row{display:grid;grid-template-columns:34px 150px 124px;column-gap:9px;align-items:center}
+.cols{height:22px;font:700 12px/1 var(--ui);color:var(--muted);border-bottom:1px solid var(--line)}
+.cols span{text-align:center}.cols span:first-child{text-align:left}
+.row{min-height:48px;border-bottom:1px solid var(--line)}
+.row .v{text-align:center;font:800 19px/1 var(--ui);color:var(--ink-2)}
+.disc{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:800 14px/1 var(--ui);color:var(--muted);border:1.5px solid var(--line-2)}
+.row.done .disc{background:var(--grad);border:0;color:var(--on-accent)}
+.row.done .disc svg{width:16px;height:16px;stroke-width:3}
+.row.done .v{color:var(--ink)}
+.row.open{grid-template-rows:auto auto;row-gap:10px;margin:6px -8px;padding:10px 7px 8px;border:1px solid var(--wash-line);border-radius:var(--r-panel);background:#FFFAF5}
+.row.open .disc{border:0;background:var(--ink);color:#fff}
+.sets .row:last-child{border-bottom:0}
+.step{display:grid;grid-template-columns:46px 1fr 46px;align-items:center;height:50px;border-radius:999px;background:var(--card);border:1px solid var(--line-2);box-shadow:0 1px 2px rgba(39,34,30,.05)}
+.step button{height:48px;display:grid;place-items:center;color:var(--ink)}
+.step button svg{width:20px;height:20px;stroke-width:2.4}
+.step output{text-align:center;font:800 25px/1 var(--ui);color:var(--ink)}
+.done-btn{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:8px;height:54px;border-radius:var(--r-btn);background:var(--grad);
+  color:var(--on-accent);font:800 18px/1 var(--ui);box-shadow:0 1px 0 rgba(180,86,31,.22),0 4px 12px rgba(239,145,89,.25)}
+.done-btn svg{width:20px;height:20px;stroke-width:2.8}
+.sets.lr .cols,.sets.lr .row{grid-template-columns:34px 100px 87px 87px;column-gap:6px}
+.sets.lr .row.open{grid-template-columns:34px 1fr 1fr;column-gap:9px}
+.sets.lr .row.open .step.w{grid-column:2/4}
+.sets.lr .row.open .step.l{grid-column:2}
+.sets.lr .row.open .step.r{grid-column:3}
+.step output.cap{display:flex;flex-direction:column;align-items:center;gap:3px;line-height:1}
+.step output.cap small{font:700 11px/1 var(--ui);color:var(--muted)}
+.step output.cap b{font:800 23px/1 var(--ui)}
+.row.open.demo{display:none}
+html.open-ex3 .row.open.demo{display:grid}
+html.open-ex3 .row.demo-hide{display:none}
+
+.ex-foot{display:flex;align-items:center;margin:0 -8px;height:50px;border-top:1px solid var(--line)}
+.tb{display:flex;align-items:center;gap:6px;height:44px;padding:0 8px;font:700 14px/1 var(--ui);color:var(--ink-2)}
+.tb svg{width:16px;height:16px;stroke-width:2.4}
+.tb.q{color:var(--muted)}
+.ex-foot .sp{flex:1}
+
+/* dock: rest timer + finish */
+.fade{position:fixed;left:var(--x);width:390px;bottom:0;height:calc(var(--safe-bottom) + var(--tab-h) + var(--dock-h) + 22px);z-index:39;
+  background:linear-gradient(to bottom,rgba(246,244,240,0) 0,rgba(246,244,240,.94) 20px,var(--paper) 36px);pointer-events:none}
+.dock{position:fixed;left:calc(var(--x) + 12px);width:366px;bottom:calc(var(--safe-bottom) + var(--tab-h) + 8px);height:var(--dock-h);z-index:40;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);box-shadow:var(--shadow-float);
+  display:flex;align-items:center;gap:12px;padding:0 8px 0 12px;overflow:hidden}
+.ring{position:relative;width:42px;height:42px;flex:none}
+.ring svg{width:42px;height:42px;transform:rotate(-90deg)}
+.ring .ic{position:absolute;inset:0;display:grid;place-items:center;color:var(--accent-ink)}
+.ring .ic svg{width:18px;height:18px;transform:none}
+.rest{display:flex;flex-direction:column;gap:3px}
+.rest .t{font:800 25px/1 var(--ui);color:var(--ink)}
+.rest .t small{font:700 13px/1 var(--ui);color:var(--muted);margin-left:6px}
+.rest .s{font:700 12px/1 var(--ui);color:var(--muted)}
+.finish{margin-left:auto;height:48px;padding:0 20px;border-radius:var(--r-btn);border:1.5px solid var(--ink);color:var(--ink);font:800 16px/1 var(--ui);display:flex;align-items:center;gap:8px}
+
+/* tab bar */
+.tabs{position:fixed;bottom:0;left:var(--x);width:390px;height:calc(var(--tab-h) + var(--safe-bottom));padding:0 10px var(--safe-bottom);z-index:41;
+  background:var(--paper);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr)}
+.tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font:700 11px/1 var(--ui);color:var(--muted)}
+.tab svg{width:23px;height:23px;stroke-width:1.9}
+.tab.on{color:var(--ink)}
+.tab.on svg{color:var(--accent-ink)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="plus" viewBox="0 0 24 24"><path d="M5 12h14M12 5v14"/></symbol>
+  <symbol id="minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+  <symbol id="check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="pen" viewBox="0 0 24 24"><path d="M21.17 6.81a1 1 0 0 0-3.99-3.99L3.84 16.17a2 2 0 0 0-.5.83l-1.32 4.35a.5.5 0 0 0 .62.62l4.35-1.32a2 2 0 0 0 .83-.5zM15 5l4 4"/></symbol>
+  <symbol id="flag" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7"/></symbol>
+  <symbol id="up" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></symbol>
+  <symbol id="down" viewBox="0 0 24 24"><path d="M12 5v14M19 12l-7 7-7-7"/></symbol>
+  <symbol id="same" viewBox="0 0 24 24"><path d="M5 9h14M5 15h14"/></symbol>
+  <symbol id="gauge" viewBox="0 0 24 24"><path d="m12 14 4-4M3.34 19a10 10 0 1 1 17.32 0"/></symbol>
+  <symbol id="timer" viewBox="0 0 24 24"><path d="M10 2h4M12 14l3-3"/><circle cx="12" cy="14" r="8"/></symbol>
+  <symbol id="send" viewBox="0 0 24 24"><path d="M14.54 21.69a.5.5 0 0 0 .94-.03l6.5-19a.5.5 0 0 0-.64-.64l-19 6.5a.5.5 0 0 0-.03.94l7.93 3.18a2 2 0 0 1 1.11 1.11zM21.85 2.15 10.91 13.09"/></symbol>
+  <symbol id="star" viewBox="0 0 24 24"><path d="M11.53 2.3a.53.53 0 0 1 .95 0l2.31 4.68a2.12 2.12 0 0 0 1.6 1.16l5.16.76a.53.53 0 0 1 .3.9l-3.74 3.64a2.12 2.12 0 0 0-.61 1.88l.88 5.14a.53.53 0 0 1-.77.56l-4.62-2.43a2.12 2.12 0 0 0-1.97 0L6.4 21.01a.53.53 0 0 1-.77-.56l.88-5.14a2.12 2.12 0 0 0-.61-1.88L2.16 9.8a.53.53 0 0 1 .3-.91l5.16-.75a2.12 2.12 0 0 0 1.6-1.16z"/></symbol>
+  <symbol id="today" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M9 16l2 2 4-4"/></symbol>
+  <symbol id="plan" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M12 11h4M12 16h4M8 11h.01M8 16h.01"/></symbol>
+  <symbol id="history" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8M3 3v5h5M12 7v5l4 2"/></symbol>
+  <symbol id="settings" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
+</svg>
+
+<div class="status" aria-hidden="true"><span>21:14</span><span class="r">
+  <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+  <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.3c2.3 0 4.5.9 6.1 2.4l1.3-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3l1.3 1.4C3.5 3.2 5.7 2.3 8 2.3zm0 3.8c1.3 0 2.6.5 3.5 1.3l1.3-1.4C11.5 4.9 9.8 4.1 8 4.1S4.5 4.9 3.2 6l1.3 1.4c.9-.8 2.2-1.3 3.5-1.3zm0 3.8 2.1-2.2c-.6-.5-1.3-.8-2.1-.8s-1.5.3-2.1.8L8 9.9z"/></svg>
+  <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.8" fill="none" stroke="#000" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="9" rx="2.2"/><path d="M25 4.4v4.2c.9-.3 1.5-1.1 1.5-2.1s-.6-1.8-1.5-2.1z" fill-opacity=".4"/></svg>
+</span></div>
+
+<div class="mini" aria-hidden="true"><span>Mon 16 Nov</span><b>Push A</b><span>1 of 18 sets</span></div>
+
+<main>
+  <section class="head">
+    <div class="meta"><span>Mon 16 Nov</span><span>Updated today, 05:47</span></div>
+    <div class="title"><h1>Push A</h1><em>Shoulders first</em></div>
+    <nav class="week" aria-label="Day">
+      <a class="day on"><b>Mon</b><span>Push A</span></a>
+      <a class="day"><b>Tue</b><span>Pull A</span></a>
+      <a class="day"><b>Wed</b><span>Legs A</span></a>
+      <a class="day"><b>Thu</b><span>Push B</span></a>
+      <a class="day"><b>Fri</b><span>Pull B</span></a>
+      <a class="day"><b>Sat</b><span>Legs B</span></a>
+      <a class="day rest"><b>Sun</b><span>Rest</span></a>
+    </nav>
+    <div class="brief">
+      <p class="stage"><svg class="i"><use href="#gauge"/></svg><span><b>This week:</b> all sets, stop 2 reps before failure</span></p>
+      <p class="daynote">Lateral raises go lighter today so you reach the rep range.</p>
+    </div>
+  </section>
+
+  <!-- 1 -->
+  <article class="ex" id="ex1">
+    <div class="ex-head"><span class="ex-num">1</span><h2 class="ex-name">Seated shoulder press</h2></div>
+    <div class="ex-sub">
+      <span class="target">3 × 6-10</span>
+      <div class="choice"><button class="on"><span>Dumbbells</span></button><button><span>Machine</span></button></div>
+    </div>
+    <p class="last"><span>Last, Wed 11 Nov</span>15 kg × 7, 7, then 10 kg × 7</p>
+    <p class="coach"><span class="cue"><svg class="i"><use href="#same"/></svg></span>Same weight, aim for 8 on every set.</p>
+    <div class="sets">
+      <div class="cols"><span>Set</span><span>kg</span><span>Reps</span></div>
+      <div class="row done"><span class="disc"><svg class="i"><use href="#check"/></svg></span><span class="v">15</span><span class="v">7</span></div>
+      <div class="row open">
+        <span class="disc">2</span>
+        <div class="step"><button aria-label="Less weight"><svg class="i"><use href="#minus"/></svg></button><output>15</output><button aria-label="More weight"><svg class="i"><use href="#plus"/></svg></button></div>
+        <div class="step"><button aria-label="Fewer reps"><svg class="i"><use href="#minus"/></svg></button><output>7</output><button aria-label="More reps"><svg class="i"><use href="#plus"/></svg></button></div>
+        <button class="done-btn"><svg class="i"><use href="#check"/></svg>Done</button>
+      </div>
+      <div class="row"><span class="disc">3</span><span class="v">15</span><span class="v">7</span></div>
+    </div>
+    <div class="ex-foot">
+      <button class="tb"><svg class="i"><use href="#plus"/></svg>Add set</button>
+      <button class="tb"><svg class="i"><use href="#minus"/></svg>Remove set</button>
+      <span class="sp"></span>
+      <button class="tb q"><svg class="i"><use href="#pen"/></svg>Note</button>
+      <button class="tb q"><svg class="i"><use href="#flag"/></svg>Pain</button>
+    </div>
+  </article>
+
+  <!-- 2 -->
+  <article class="ex" id="ex2">
+    <div class="ex-head"><span class="ex-num">2</span><h2 class="ex-name">Incline dumbbell press, 30°</h2></div>
+    <div class="ex-sub"><span class="target">3 × 8-12</span></div>
+    <p class="last"><span>Last, Wed 11 Nov</span>10 kg × 7, 7, 7</p>
+    <p class="coach"><span class="cue"><svg class="i"><use href="#same"/></svg></span>Stay at 10 kg until every set reaches 8.</p>
+    <div class="sets">
+      <div class="cols"><span>Set</span><span>kg</span><span>Reps</span></div>
+      <div class="row"><span class="disc">1</span><span class="v">10</span><span class="v">7</span></div>
+      <div class="row"><span class="disc">2</span><span class="v">10</span><span class="v">7</span></div>
+      <div class="row"><span class="disc">3</span><span class="v">10</span><span class="v">7</span></div>
+    </div>
+    <div class="ex-foot">
+      <button class="tb"><svg class="i"><use href="#plus"/></svg>Add set</button>
+      <button class="tb"><svg class="i"><use href="#minus"/></svg>Remove set</button>
+      <span class="sp"></span>
+      <button class="tb q"><svg class="i"><use href="#pen"/></svg>Note</button>
+      <button class="tb q"><svg class="i"><use href="#flag"/></svg>Pain</button>
+    </div>
+  </article>
+
+  <!-- 3 -->
+  <article class="ex" id="ex3">
+    <div class="ex-head"><span class="ex-num">3</span><h2 class="ex-name">Cable lateral raise, one arm</h2></div>
+    <div class="ex-sub"><span class="target">4 × 12-15</span><span class="star"><svg class="i"><use href="#star"/></svg>Side delts</span></div>
+    <p class="last"><span>Last, Wed 11 Nov</span>10 kg, right 6, 7, 7, 5; <i>left 6, 5, 5, 4</i></p>
+    <p class="coach"><span class="cue"><svg class="i"><use href="#down"/></svg></span>Far too heavy last time. About 5 kg, and start each set with the left arm.</p>
+    <div class="sets lr">
+      <div class="cols"><span>Set</span><span>kg</span><span>Left</span><span>Right</span></div>
+      <div class="row demo-hide"><span class="disc">1</span><span class="v">5</span><span class="v">12</span><span class="v">12</span></div>
+      <div class="row open demo">
+        <span class="disc">1</span>
+        <div class="step w"><button aria-label="Less weight"><svg class="i"><use href="#minus"/></svg></button><output class="cap"><small>kg</small><b>5</b></output><button aria-label="More weight"><svg class="i"><use href="#plus"/></svg></button></div>
+        <div class="step l"><button aria-label="Fewer left reps"><svg class="i"><use href="#minus"/></svg></button><output class="cap"><small>Left</small><b>12</b></output><button aria-label="More left reps"><svg class="i"><use href="#plus"/></svg></button></div>
+        <div class="step r"><button aria-label="Fewer right reps"><svg class="i"><use href="#minus"/></svg></button><output class="cap"><small>Right</small><b>12</b></output><button aria-label="More right reps"><svg class="i"><use href="#plus"/></svg></button></div>
+        <button class="done-btn"><svg class="i"><use href="#check"/></svg>Done</button>
+      </div>
+      <div class="row"><span class="disc">2</span><span class="v">5</span><span class="v">12</span><span class="v">12</span></div>
+      <div class="row"><span class="disc">3</span><span class="v">5</span><span class="v">12</span><span class="v">12</span></div>
+      <div class="row"><span class="disc">4</span><span class="v">5</span><span class="v">12</span><span class="v">12</span></div>
+    </div>
+    <div class="ex-foot">
+      <button class="tb"><svg class="i"><use href="#plus"/></svg>Add set</button>
+      <button class="tb"><svg class="i"><use href="#minus"/></svg>Remove set</button>
+      <span class="sp"></span>
+      <button class="tb q"><svg class="i"><use href="#pen"/></svg>Note</button>
+      <button class="tb q"><svg class="i"><use href="#flag"/></svg>Pain</button>
+    </div>
+  </article>
+
+  <!-- 4 -->
+  <article class="ex" id="ex4">
+    <div class="ex-head"><span class="ex-num">4</span><h2 class="ex-name">Chest fly</h2></div>
+    <div class="ex-sub">
+      <span class="target">2 × 12-15</span>
+      <div class="choice"><button class="on"><span>Pec deck</span></button><button><span>Cables</span></button></div>
+    </div>
+    <p class="last"><span>Last, Wed 11 Nov</span>25 kg × 15, 15</p>
+    <p class="coach"><span class="cue"><svg class="i"><use href="#up"/></svg></span>Up one step: every set reached 15.</p>
+    <div class="sets">
+      <div class="cols"><span>Set</span><span>kg</span><span>Reps</span></div>
+      <div class="row"><span class="disc">1</span><span class="v">30</span><span class="v">15</span></div>
+      <div class="row"><span class="disc">2</span><span class="v">30</span><span class="v">15</span></div>
+    </div>
+    <div class="ex-foot">
+      <button class="tb"><svg class="i"><use href="#plus"/></svg>Add set</button>
+      <button class="tb"><svg class="i"><use href="#minus"/></svg>Remove set</button>
+      <span class="sp"></span>
+      <button class="tb q"><svg class="i"><use href="#pen"/></svg>Note</button>
+      <button class="tb q"><svg class="i"><use href="#flag"/></svg>Pain</button>
+    </div>
+  </article>
+
+  <!-- 5 -->
+  <article class="ex" id="ex5">
+    <div class="ex-head"><span class="ex-num">5</span><h2 class="ex-name">Triceps pushdown, cable</h2></div>
+    <div class="ex-sub"><span class="target">4 × 10-15</span></div>
+    <p class="last"><span>Last, Wed 11 Nov</span>20 kg × 15, 15, 15</p>
+    <p class="coach"><span class="cue"><svg class="i"><use href="#up"/></svg></span>Up one step: every set reached 15.</p>
+    <div class="sets">
+      <div class="cols"><span>Set</span><span>kg</span><span>Reps</span></div>
+      <div class="row"><span class="disc">1</span><span class="v">22.5</span><span class="v">15</span></div>
+      <div class="row"><span class="disc">2</span><span class="v">22.5</span><span class="v">15</span></div>
+      <div class="row"><span class="disc">3</span><span class="v">22.5</span><span class="v">15</span></div>
+      <div class="row"><span class="disc">4</span><span class="v">22.5</span><span class="v">15</span></div>
+    </div>
+    <div class="ex-foot">
+      <button class="tb"><svg class="i"><use href="#plus"/></svg>Add set</button>
+      <button class="tb"><svg class="i"><use href="#minus"/></svg>Remove set</button>
+      <span class="sp"></span>
+      <button class="tb q"><svg class="i"><use href="#pen"/></svg>Note</button>
+      <button class="tb q"><svg class="i"><use href="#flag"/></svg>Pain</button>
+    </div>
+  </article>
+
+  <!-- 6 -->
+  <article class="ex" id="ex6">
+    <div class="ex-head"><span class="ex-num">6</span><h2 class="ex-name">Dumbbell lateral raise, light</h2></div>
+    <div class="ex-sub"><span class="target">2 × 15-20</span><span class="star"><svg class="i"><use href="#star"/></svg>Side delts</span></div>
+    <p class="last"><span>Last, Wed 11 Nov</span>8 kg × 7, then 5 kg × 9, 9, 9</p>
+    <p class="coach"><span class="cue"><svg class="i"><use href="#down"/></svg></span>Go lighter: 3 to 4 kg.</p>
+    <div class="sets">
+      <div class="cols"><span>Set</span><span>kg</span><span>Reps</span></div>
+      <div class="row"><span class="disc">1</span><span class="v">4</span><span class="v">9</span></div>
+      <div class="row"><span class="disc">2</span><span class="v">4</span><span class="v">9</span></div>
+    </div>
+    <div class="ex-foot">
+      <button class="tb"><svg class="i"><use href="#plus"/></svg>Add set</button>
+      <button class="tb"><svg class="i"><use href="#minus"/></svg>Remove set</button>
+      <span class="sp"></span>
+      <button class="tb q"><svg class="i"><use href="#pen"/></svg>Note</button>
+      <button class="tb q"><svg class="i"><use href="#flag"/></svg>Pain</button>
+    </div>
+  </article>
+</main>
+
+<div class="fade" aria-hidden="true"></div>
+<div class="dock">
+  <div class="ring"><svg viewBox="0 0 42 42"><circle cx="21" cy="21" r="18" fill="none" stroke="#F2E9E0" stroke-width="4"/><circle cx="21" cy="21" r="18" fill="none" stroke="#EF9159" stroke-width="4" stroke-linecap="round" stroke-dasharray="99.5 113.1"/></svg><span class="ic"><svg class="i"><use href="#timer"/></svg></span></div>
+  <div class="rest"><span class="s">Rest</span><span class="t">2:12<small>of 2:30</small></span></div>
+  <button class="finish">Finish</button>
+</div>
+<nav class="tabs">
+  <a class="tab on"><svg class="i"><use href="#today"/></svg>Today</a>
+  <a class="tab"><svg class="i"><use href="#plan"/></svg>Plan</a>
+  <a class="tab"><svg class="i"><use href="#history"/></svg>History</a>
+  <a class="tab"><svg class="i"><use href="#settings"/></svg>Settings</a>
+</nav>
+<div class="homebar" aria-hidden="true"></div>
+
+<script>
+/* Mockup only: ?at=ex3 shows the page scrolled to exercise 3; ?y=N to N px.
+   (A query, not a #hash: headless screenshots go blank after any real scroll.) */
+function place(){
+  var q=new URLSearchParams(location.search), at=q.get('at'), y=null;
+  if(q.get('open')==='ex3') document.documentElement.classList.add('open-ex3');
+  if(at){var el=document.getElementById(at); if(el) y=el.getBoundingClientRect().top+window.scrollY-47-44-10;}
+  else if(q.get('y')){y=parseInt(q.get('y'),10);}
+  /* headless screenshots go blank after a real scroll, so the mockup shifts main instead */
+  if(y!==null){document.querySelector('main').style.transform='translateY('+(-y)+'px)';}
+  document.documentElement.classList.toggle('scrolled',(y||window.scrollY)>90);
+  document.documentElement.setAttribute('data-h',document.documentElement.scrollHeight);
+}
+(document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(place);
+window.addEventListener('scroll',function(){document.documentElement.classList.toggle('scrolled',window.scrollY>90)});
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lift Today, A or B</title>
+<style>
+/* Neutral on purpose, so the page itself favours neither look. */
+:root{--bg:#F2F2F3;--ink:#1C1C1F;--muted:#6B6B73;--line:#DEDEE2}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:500 16px/1.45 -apple-system,system-ui,sans-serif;padding:40px 32px 56px}
+header{max-width:1240px;margin:0 auto 28px}
+h1{font-size:28px;font-weight:700;letter-spacing:-.01em}
+header p{color:var(--muted);margin-top:4px}
+.looks{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.look h2{font-size:22px;font-weight:700}
+.look > p{color:var(--muted);margin:2px 0 16px}
+.shots{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+figure img{display:block;width:100%;height:auto;border-radius:36px;border:1px solid var(--line);box-shadow:0 12px 32px rgba(0,0,0,.10)}
+figcaption{font-size:13px;color:var(--muted);text-align:center;margin-top:10px}
+.more{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:14px;font-size:14px;color:var(--muted)}
+.more a{color:var(--ink)}
+@media (max-width:900px){body{padding:24px 16px 40px}.looks{grid-template-columns:1fr;gap:48px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Lift, Today screen</h1>
+  <p>Mid-session: set 1 done, rest timer running, set 2 ready. Same content in both. Pick A or B.</p>
+</header>
+<main class="looks">
+  <section class="look">
+    <h2>A, calm</h2>
+    <p>Paper notebook: serif titles, a quiet table of sets, one peach accent.</p>
+    <div class="shots">
+      <figure><img src="a-1.png" alt="Look A, top of the Today screen"><figcaption>Opening view</figcaption></figure>
+      <figure><img src="a-2.png" alt="Look A, scrolled to exercise 3 with left and right reps"><figcaption>Scrolled to exercise 3</figcaption></figure>
+    </div>
+    <p class="more"><a href="a-full.png">Whole page</a> <a href="a-3.png">Left and right reps, set open</a> <a href="today-a.html">Live mockup</a></p>
+  </section>
+  <section class="look">
+    <h2>B, bright</h2>
+    <p>LangOS: heavy rounded type, chunky buttons on a lip, green for done.</p>
+    <div class="shots">
+      <figure><img src="b-1.png" alt="Look B, top of the Today screen"><figcaption>Opening view</figcaption></figure>
+      <figure><img src="b-2.png" alt="Look B, scrolled to exercise 3 with left and right reps"><figcaption>Scrolled to exercise 3</figcaption></figure>
+    </div>
+    <p class="more"><a href="b-full.png">Whole page</a> <a href="b-3.png">Left and right reps, set open</a> <a href="today-b.html">Live mockup</a></p>
+  </section>
+</main>
+</body>
+</html>

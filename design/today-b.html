@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Lift Today, look B</title>
+<style>
+/* Look B, bright (LangOS, Emerald lit): solid fills, chunky forms on a darker lip, SF Rounded. Static mockup, 390 x 844.
+   The SFR face below exists only so a Mac browser can show SF Rounded; on the iPhone ui-rounded resolves first. */
+@font-face{font-family:"SFR";src:local("SF Pro Rounded"),url("file:///System/Library/Fonts/SFNSRounded.ttf");font-weight:100 900}
+:root{
+  --page:#FFFFFF; --surface:#FFFFFF; --sunken:#F5F5F6; --border:#E5E5E7; --ink:#17171A; --ink-2:#3A3A40; --muted:#6A6A72;
+  --accent:#22C464; --accent-lip:#008D3A; --accent-text:#00860D; --on-accent:#17171A; --accent-soft:#DFF6E8; --accent-line:#9EDDB6;
+  --orange:#F67045; --orange-lip:#B04519; --orange-text:#CA4B20; --orange-soft:#FEEEE9;
+  --red:#E5484D; --red-lip:#B83338;
+  --r-btn:16px; --r-card:18px; --r-tile:14px; --r-bar:26px; --r-tab:20px;
+  --lip:4px; --lip-sm:3px;
+  --g:16px; --safe-top:47px; --safe-bottom:34px; --bottom-h:130px;
+  --ui:ui-rounded,"SF Pro Rounded","SFR",system-ui,sans-serif;
+  --x:0px;
+}
+@media (min-width:600px){:root{--x:calc(50vw - 195px)}}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--page)}
+body{width:390px;margin:0 0 0 var(--x);background:var(--page);color:var(--ink);font:500 17px/1.4 var(--ui);
+  -webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,output{font:inherit;color:inherit;background:none;border:0}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* iOS chrome (mockup only) */
+.status{position:fixed;top:0;left:var(--x);width:390px;height:var(--safe-top);z-index:60;background:var(--page);
+  display:flex;align-items:center;justify-content:space-between;padding:4px 26px 0 44px;color:#000;font:600 17px/1 -apple-system,system-ui,sans-serif}
+.status .r{display:flex;gap:6px;align-items:center}
+.homebar{position:fixed;bottom:8px;left:calc(var(--x) + 128px);width:134px;height:5px;border-radius:3px;background:#000;z-index:70}
+.mini{position:fixed;top:var(--safe-top);left:var(--x);width:390px;height:46px;z-index:55;background:var(--page);
+  border-bottom:2px solid var(--border);display:none;align-items:center;justify-content:center}
+.mini b{font:800 18px/1 var(--ui)}
+.mini span{position:absolute;right:var(--g);font:700 14px/1 var(--ui);color:var(--muted)}
+.mini span:first-child{left:var(--g);right:auto}
+html.scrolled .mini{display:flex}
+
+main{padding:calc(var(--safe-top) + 4px) 0 calc(var(--safe-bottom) + var(--bottom-h) + 28px)}
+
+/* head */
+.head{padding:0 var(--g)}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.top h1{font:800 34px/1.1 var(--ui);letter-spacing:-.01em}
+.top .sub{font:700 17px/1.2 var(--ui);color:var(--muted);margin-top:2px}
+.when{text-align:right;padding-top:6px}
+.when b{display:block;font:800 17px/1.2 var(--ui)}
+.when span{display:inline-flex;align-items:center;gap:6px;margin-top:4px;font:700 13px/1 var(--ui);color:var(--muted)}
+.when .dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin:12px 0 var(--lip-sm)}
+.day{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;height:48px;border:2px solid var(--border);border-radius:var(--r-tile);
+  background:var(--surface);box-shadow:0 var(--lip-sm) 0 var(--border)}
+.day b{font:800 11px/1 var(--ui);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.day span{font:800 12px/1 var(--ui);color:var(--ink);white-space:nowrap}
+.day.on{background:var(--accent-soft);border-color:var(--accent);box-shadow:0 var(--lip-sm) 0 var(--accent)}
+.day.on b,.day.on span{color:var(--accent-text)}
+.day.rest{background:var(--sunken)}
+.day.rest span{color:var(--muted)}
+.card{background:var(--surface);border:2px solid var(--border);border-radius:var(--r-card);box-shadow:0 var(--lip-sm) 0 var(--border)}
+.brief{margin-top:10px;padding:10px 14px 12px}
+.stage{display:flex;align-items:center;gap:8px;font:700 14px/1.3 var(--ui);color:var(--muted)}
+.stage svg{width:18px;height:18px;color:var(--accent-text)}
+.stage b{color:var(--ink);font-weight:800}
+.daynote{margin-top:6px;font:700 17px/1.3 var(--ui);color:var(--ink)}
+
+/* exercise card */
+.ex{margin:14px var(--g) var(--lip-sm);padding:12px 14px 10px}
+.ex-head{display:flex;align-items:flex-start;gap:10px}
+.num{flex:none;width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font:800 15px/1 var(--ui);color:var(--muted);
+  background:var(--sunken);border:2px solid var(--border)}
+.ex.now .num{background:var(--accent);border-color:var(--accent);color:var(--on-accent);box-shadow:0 2px 0 var(--accent-lip)}
+.ex-name{flex:1;font:800 20px/1.2 var(--ui);padding-top:3px}
+.sub-row{display:flex;align-items:center;gap:10px;margin:10px 0 0;min-height:24px}
+.target{flex:none;font:800 18px/1 var(--ui);white-space:nowrap}
+.sub-row .seg,.sub-row .pill{margin-left:auto}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:999px;font:800 12px/1 var(--ui)}
+.pill svg{width:12px;height:12px;fill:currentColor;stroke:none}
+.pill.star{background:var(--orange-soft);color:var(--orange-text)}
+.seg{display:grid;grid-template-columns:repeat(2,104px);gap:6px}
+.seg button{height:44px;border:2px solid var(--border);border-radius:var(--r-tile);background:var(--sunken);font:800 15px/1 var(--ui);color:var(--muted)}
+.seg button.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-text)}
+.last{margin-top:10px;font:700 15px/1.35 var(--ui);color:var(--ink-2)}
+.last span{color:var(--muted);margin-right:6px}
+.last i{font-style:normal;white-space:nowrap}
+.coach{display:flex;gap:10px;align-items:flex-start;margin-top:8px;font:800 16px/1.35 var(--ui);color:var(--ink)}
+.cue{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;margin-top:-1px}
+.cue svg{width:15px;height:15px;stroke-width:3}
+.cue.up{background:var(--accent);color:var(--on-accent);box-shadow:0 2px 0 var(--accent-lip)}
+.cue.same{background:var(--sunken);color:var(--ink-2);box-shadow:inset 0 0 0 2px var(--border)}
+.cue.down{background:var(--orange);color:#fff;box-shadow:0 2px 0 var(--orange-lip)}
+
+/* sets */
+.sets{margin-top:8px;display:flex;flex-direction:column;gap:2px}
+.row{display:flex;align-items:center;gap:12px;min-height:46px;padding:0 2px}
+.disc{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font:800 15px/1 var(--ui);color:var(--muted);
+  background:var(--surface);border:2px solid var(--border);box-shadow:0 2px 0 var(--border)}
+.row.done .disc{background:var(--accent);border-color:var(--accent);color:var(--on-accent);box-shadow:0 2px 0 var(--accent-lip)}
+.row.done .disc svg{width:18px;height:18px;stroke-width:3.4}
+.val{font:800 20px/1 var(--ui);color:var(--ink)}
+.val small{font:700 14px/1 var(--ui);color:var(--muted);margin:0 1px 0 2px}
+.val .x{font:700 16px/1 var(--ui);color:var(--muted);margin:0 6px}
+.val .lr{font:700 14px/1 var(--ui);color:var(--muted);margin:0 4px 0 12px}
+.val .lr:first-of-type{margin-left:10px}
+.row.todo .val{color:var(--ink-2)}
+.row.done .val{color:var(--ink)}
+.row .side{margin-left:auto;font:700 13px/1 var(--ui);color:var(--muted)}
+
+.open{position:relative;margin:12px -4px 6px;padding:17px 10px 10px;background:var(--sunken);border-radius:var(--r-card)}
+.open .tag{position:absolute;top:-12px;left:12px;padding:5px 10px;border-radius:999px;background:var(--accent);color:var(--on-accent);box-shadow:0 2px 0 var(--accent-lip);font:800 12px/1 var(--ui);letter-spacing:.05em;text-transform:uppercase}
+.steps{display:grid;grid-template-columns:166px 1fr;gap:8px}
+.stepper{display:flex;align-items:center;justify-content:space-between;height:60px;padding:0 6px;margin-bottom:var(--lip-sm);background:var(--surface);border:2px solid var(--border);border-radius:var(--r-card);box-shadow:0 var(--lip-sm) 0 var(--border)}
+.rb{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--surface);border:2px solid var(--border);box-shadow:0 var(--lip-sm) 0 var(--border);color:var(--ink)}
+.stepper .rb{width:44px;height:44px;margin-top:-3px;background:var(--sunken)}
+.rb svg{width:22px;height:22px;stroke-width:3}
+.stepper output{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:44px}
+.stepper output b{font:800 28px/1 var(--ui);letter-spacing:-.01em}
+.stepper output small{font:800 11px/1 var(--ui);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:50px;padding:0 18px;border-radius:var(--r-btn);
+  font:700 17px/1 var(--ui);text-transform:uppercase;letter-spacing:.6px}
+.btn.go{margin:10px 0 var(--lip);background:var(--accent);color:var(--on-accent);box-shadow:0 var(--lip) 0 var(--accent-lip)}
+.btn.go svg{width:22px;height:22px;stroke-width:3.2}
+.steps.lr{grid-template-columns:1fr 1fr;row-gap:10px}
+.steps.lr .wide{grid-column:1/3}
+
+.ex-foot{display:flex;align-items:center;gap:8px;margin-top:8px;padding-top:10px;border-top:2px solid var(--sunken)}
+.setcount{display:flex;align-items:center;gap:6px}
+.rb.sm{width:44px;height:44px}
+.rb.sm svg{width:18px;height:18px}
+.setcount span{font:800 15px/1 var(--ui);color:var(--ink-2);text-align:center;padding:0 2px;white-space:nowrap}
+.setcount + .mini-btn{margin-left:auto}
+.mini-btn{display:flex;align-items:center;gap:5px;height:42px;padding:0 9px;margin-bottom:var(--lip-sm);border-radius:14px;background:var(--surface);border:2px solid var(--border);
+  box-shadow:0 var(--lip-sm) 0 var(--border);font:700 13px/1 var(--ui);text-transform:uppercase;letter-spacing:.4px;color:var(--muted)}
+.mini-btn svg{width:16px;height:16px;stroke-width:2.6}
+
+/* bottom panel: session row over the tab row */
+.fade{position:fixed;left:var(--x);width:390px;bottom:0;height:calc(var(--safe-bottom) + var(--bottom-h) + 24px);z-index:39;
+  background:linear-gradient(to bottom,rgba(255,255,255,0) 0,rgba(255,255,255,.95) 16px,#fff 28px);pointer-events:none}
+.bottom{position:fixed;left:calc(var(--x) + 10px);width:370px;bottom:calc(var(--safe-bottom) + 2px);z-index:40;padding:6px;
+  background:var(--surface);border:2px solid var(--border);border-radius:var(--r-bar);box-shadow:0 var(--lip) 0 var(--border)}
+.dock{display:flex;align-items:center;gap:11px;height:52px;padding:0 2px 0 6px;margin-bottom:6px;border-bottom:2px solid var(--sunken)}
+.ring{position:relative;width:42px;height:42px;flex:none}
+.ring svg.r{width:42px;height:42px;transform:rotate(-90deg)}
+.ring .ic{position:absolute;inset:0;display:grid;place-items:center;color:var(--accent-text)}
+.ring .ic svg{width:17px;height:17px;stroke-width:2.8}
+.rest{display:flex;flex-direction:column;gap:3px}
+.rest .t{font:800 26px/1 var(--ui)}
+.rest .t small{font:700 13px/1 var(--ui);color:var(--muted);margin-left:6px}
+.rest .s{font:800 11px/1 var(--ui);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.finish{margin:0 0 var(--lip-sm) auto;width:auto;min-height:44px;padding:0 18px;background:var(--surface);color:var(--ink);border:2px solid var(--border);box-shadow:0 var(--lip-sm) 0 var(--border);font-size:15px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
+.tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;height:48px;border-radius:var(--r-tab);border:2px solid transparent;font:700 11px/1 var(--ui);color:var(--muted)}
+.tab svg{width:24px;height:24px;stroke-width:2.4}
+.tab.on{background:var(--accent-soft);border-color:var(--accent-line);color:var(--accent-text)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="plus" viewBox="0 0 24 24"><path d="M5 12h14M12 5v14"/></symbol>
+  <symbol id="minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+  <symbol id="check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="pen" viewBox="0 0 24 24"><path d="M21.17 6.81a1 1 0 0 0-3.99-3.99L3.84 16.17a2 2 0 0 0-.5.83l-1.32 4.35a.5.5 0 0 0 .62.62l4.35-1.32a2 2 0 0 0 .83-.5zM15 5l4 4"/></symbol>
+  <symbol id="flag" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7"/></symbol>
+  <symbol id="up" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></symbol>
+  <symbol id="down" viewBox="0 0 24 24"><path d="M12 5v14M19 12l-7 7-7-7"/></symbol>
+  <symbol id="same" viewBox="0 0 24 24"><path d="M5 9h14M5 15h14"/></symbol>
+  <symbol id="gauge" viewBox="0 0 24 24"><path d="m12 14 4-4M3.34 19a10 10 0 1 1 17.32 0"/></symbol>
+  <symbol id="timer" viewBox="0 0 24 24"><path d="M10 2h4M12 14l3-3"/><circle cx="12" cy="14" r="8"/></symbol>
+  <symbol id="star" viewBox="0 0 24 24"><path d="M11.53 2.3a.53.53 0 0 1 .95 0l2.31 4.68a2.12 2.12 0 0 0 1.6 1.16l5.16.76a.53.53 0 0 1 .3.9l-3.74 3.64a2.12 2.12 0 0 0-.61 1.88l.88 5.14a.53.53 0 0 1-.77.56l-4.62-2.43a2.12 2.12 0 0 0-1.97 0L6.4 21.01a.53.53 0 0 1-.77-.56l.88-5.14a2.12 2.12 0 0 0-.61-1.88L2.16 9.8a.53.53 0 0 1 .3-.91l5.16-.75a2.12 2.12 0 0 0 1.6-1.16z"/></symbol>
+  <symbol id="today" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M9 16l2 2 4-4"/></symbol>
+  <symbol id="plan" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M12 11h4M12 16h4M8 11h.01M8 16h.01"/></symbol>
+  <symbol id="history" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8M3 3v5h5M12 7v5l4 2"/></symbol>
+  <symbol id="settings" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
+</svg>
+
+<div class="status" aria-hidden="true"><span>21:14</span><span class="r">
+  <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+  <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.3c2.3 0 4.5.9 6.1 2.4l1.3-1.4C13.4 1.4 10.8.3 8 .3S2.6 1.4.6 3.3l1.3 1.4C3.5 3.2 5.7 2.3 8 2.3zm0 3.8c1.3 0 2.6.5 3.5 1.3l1.3-1.4C11.5 4.9 9.8 4.1 8 4.1S4.5 4.9 3.2 6l1.3 1.4c.9-.8 2.2-1.3 3.5-1.3zm0 3.8 2.1-2.2c-.6-.5-1.3-.8-2.1-.8s-1.5.3-2.1.8L8 9.9z"/></svg>
+  <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.8" fill="none" stroke="#000" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="9" rx="2.2"/><path d="M25 4.4v4.2c.9-.3 1.5-1.1 1.5-2.1s-.6-1.8-1.5-2.1z" fill-opacity=".4"/></svg>
+</span></div>
+
+<div class="mini" aria-hidden="true"><span>Mon 16 Nov</span><b>Push A</b><span>1 of 18 sets</span></div>
+
+<main>
+  <section class="head">
+    <div class="top">
+      <div><h1>Push A</h1><p class="sub">Shoulders first</p></div>
+      <div class="when"><b>Mon 16 Nov</b><span><i class="dot"></i>Updated today, 05:47</span></div>
+    </div>
+    <nav class="week" aria-label="Day">
+      <a class="day on"><b>Mon</b><span>Push A</span></a>
+      <a class="day"><b>Tue</b><span>Pull A</span></a>
+      <a class="day"><b>Wed</b><span>Legs A</span></a>
+      <a class="day"><b>Thu</b><span>Push B</span></a>
+      <a class="day"><b>Fri</b><span>Pull B</span></a>
+      <a class="day"><b>Sat</b><span>Legs B</span></a>
+      <a class="day rest"><b>Sun</b><span>Rest</span></a>
+    </nav>
+    <div class="card brief">
+      <p class="stage"><svg class="i"><use href="#gauge"/></svg><span><b>This week:</b> all sets, stop 2 reps before failure</span></p>
+      <p class="daynote">Lateral raises go lighter today so you reach the rep range.</p>
+    </div>
+  </section>
+
+  <!-- 1 -->
+  <article class="card ex now" id="ex1">
+    <div class="ex-head"><span class="num">1</span><h2 class="ex-name">Seated shoulder press</h2></div>
+    <div class="sub-row"><span class="target">3 × 6-10</span><div class="seg"><button class="on">Dumbbells</button><button>Machine</button></div></div>
+    <p class="last"><span>Last, Wed 11 Nov</span>15 kg × 7, 7, then 10 kg × 7</p>
+    <p class="coach"><span class="cue same"><svg class="i"><use href="#same"/></svg></span>Same weight, aim for 8 on every set.</p>
+    <div class="sets">
+      <div class="row done"><span class="disc"><svg class="i"><use href="#check"/></svg></span><span class="val">15<small>kg</small><span class="x">×</span>7</span><span class="side">Set 1</span></div>
+      <div class="open">
+        <span class="tag">Set 2</span>
+        <div class="steps">
+          <div class="stepper"><button class="rb" aria-label="Less weight"><svg class="i"><use href="#minus"/></svg></button><output><b>15</b><small>kg</small></output><button class="rb" aria-label="More weight"><svg class="i"><use href="#plus"/></svg></button></div>
+          <div class="stepper"><button class="rb" aria-label="Fewer reps"><svg class="i"><use href="#minus"/></svg></button><output><b>7</b><small>reps</small></output><button class="rb" aria-label="More reps"><svg class="i"><use href="#plus"/></svg></button></div>
+        </div>
+        <button class="btn go"><svg class="i"><use href="#check"/></svg>Done</button>
+      </div>
+      <div class="row todo"><span class="disc">3</span><span class="val">15<small>kg</small><span class="x">×</span>7</span></div>
+    </div>
+    <div class="ex-foot">
+      <div class="setcount"><button class="rb sm" aria-label="Remove set"><svg class="i"><use href="#minus"/></svg></button><span>3 sets</span><button class="rb sm" aria-label="Add set"><svg class="i"><use href="#plus"/></svg></button></div>
+      <button class="mini-btn"><svg class="i"><use href="#pen"/></svg>Note</button>
+      <button class="mini-btn"><svg class="i"><use href="#flag"/></svg>Pain</button>
+    </div>
+  </article>
+
+  <!-- 2 -->
+  <article class="card ex" id="ex2">
+    <div class="ex-head"><span class="num">2</span><h2 class="ex-name">Incline dumbbell press, 30°</h2></div>
+    <div class="sub-row"><span class="target">3 × 8-12</span></div>
+    <p class="last"><span>Last, Wed 11 Nov</span>10 kg × 7, 7, 7</p>
+    <p class="coach"><span class="cue same"><svg class="i"><use href="#same"/></svg></span>Stay at 10 kg until every set reaches 8.</p>
+    <div class="sets">
+      <div class="row todo"><span class="disc">1</span><span class="val">10<small>kg</small><span class="x">×</span>7</span></div>
+      <div class="row todo"><span class="disc">2</span><span class="val">10<small>kg</small><span class="x">×</span>7</span></div>
+      <div class="row todo"><span class="disc">3</span><span class="val">10<small>kg</small><span class="x">×</span>7</span></div>
+    </div>
+    <div class="ex-foot">
+      <div class="setcount"><button class="rb sm" aria-label="Remove set"><svg class="i"><use href="#minus"/></svg></button><span>3 sets</span><button class="rb sm" aria-label="Add set"><svg class="i"><use href="#plus"/></svg></button></div>
+      <button class="mini-btn"><svg class="i"><use href="#pen"/></svg>Note</button>
+      <button class="mini-btn"><svg class="i"><use href="#flag"/></svg>Pain</button>
+    </div>
+  </article>
+
+  <!-- 3 -->
+  <article class="card ex" id="ex3">
+    <div class="ex-head"><span class="num">3</span><h2 class="ex-name">Cable lateral raise, one arm</h2></div>
+    <div class="sub-row"><span class="target">4 × 12-15</span><span class="pill star"><svg class="i"><use href="#star"/></svg>Side delts</span></div>
+    <p class="last"><span>Last, Wed 11 Nov</span>10 kg, right 6, 7, 7, 5; <i>left 6, 5, 5, 4</i></p>
+    <p class="coach"><span class="cue down"><svg class="i"><use href="#down"/></svg></span>Far too heavy last time. About 5 kg, and start each set with the left arm.</p>
+    <div class="sets">
+      <div class="row todo demo-hide"><span class="disc">1</span><span class="val">5<small>kg</small><span class="lr">Left</span>12<span class="lr">Right</span>12</span></div>
+      <div class="open demo">
+        <span class="tag">Set 1</span>
+        <div class="steps lr">
+          <div class="stepper wide"><button class="rb" aria-label="Less weight"><svg class="i"><use href="#minus"/></svg></button><output><b>5</b><small>kg</small></output><button class="rb" aria-label="More weight"><svg class="i"><use href="#plus"/></svg></button></div>
+          <div class="stepper"><button class="rb" aria-label="Fewer left reps"><svg class="i"><use href="#minus"/></svg></button><output><b>12</b><small>Left</small></output><button class="rb" aria-label="More left reps"><svg class="i"><use href="#plus"/></svg></button></div>
+          <div class="stepper"><button class="rb" aria-label="Fewer right reps"><svg class="i"><use href="#minus"/></svg></button><output><b>12</b><small>Right</small></output><button class="rb" aria-label="More right reps"><svg class="i"><use href="#plus"/></svg></button></div>
+        </div>
+        <button class="btn go"><svg class="i"><use href="#check"/></svg>Done</button>
+      </div>
+      <div class="row todo"><span class="disc">2</span><span class="val">5<small>kg</small><span class="lr">Left</span>12<span class="lr">Right</span>12</span></div>
+      <div class="row todo"><span class="disc">3</span><span class="val">5<small>kg</small><span class="lr">Left</span>12<span class="lr">Right</span>12</span></div>
+      <div class="row todo"><span class="disc">4</span><span class="val">5<small>kg</small><span class="lr">Left</span>12<span class="lr">Right</span>12</span></div>
+    </div>
+    <div class="ex-foot">
+      <div class="setcount"><button class="rb sm" aria-label="Remove set"><svg class="i"><use href="#minus"/></svg></button><span>4 sets</span><button class="rb sm" aria-label="Add set"><svg class="i"><use href="#plus"/></svg></button></div>
+      <button class="mini-btn"><svg class="i"><use href="#pen"/></svg>Note</button>
+      <button class="mini-btn"><svg class="i"><use href="#flag"/></svg>Pain</button>
+    </div>
+  </article>
+
+  <!-- 4 -->
+  <article class="card ex" id="ex4">
+    <div class="ex-head"><span class="num">4</span><h2 class="ex-name">Chest fly</h2></div>
+    <div class="sub-row"><span class="target">2 × 12-15</span><div class="seg"><button class="on">Pec deck</button><button>Cables</button></div></div>
+    <p class="last"><span>Last, Wed 11 Nov</span>25 kg × 15, 15</p>
+    <p class="coach"><span class="cue up"><svg class="i"><use href="#up"/></svg></span>Up one step: every set reached 15.</p>
+    <div class="sets">
+      <div class="row todo"><span class="disc">1</span><span class="val">30<small>kg</small><span class="x">×</span>15</span></div>
+      <div class="row todo"><span class="disc">2</span><span class="val">30<small>kg</small><span class="x">×</span>15</span></div>
+    </div>
+    <div class="ex-foot">
+      <div class="setcount"><button class="rb sm" aria-label="Remove set"><svg class="i"><use href="#minus"/></svg></button><span>2 sets</span><button class="rb sm" aria-label="Add set"><svg class="i"><use href="#plus"/></svg></button></div>
+      <button class="mini-btn"><svg class="i"><use href="#pen"/></svg>Note</button>
+      <button class="mini-btn"><svg class="i"><use href="#flag"/></svg>Pain</button>
+    </div>
+  </article>
+
+  <!-- 5 -->
+  <article class="card ex" id="ex5">
+    <div class="ex-head"><span class="num">5</span><h2 class="ex-name">Triceps pushdown, cable</h2></div>
+    <div class="sub-row"><span class="target">4 × 10-15</span></div>
+    <p class="last"><span>Last, Wed 11 Nov</span>20 kg × 15, 15, 15</p>
+    <p class="coach"><span class="cue up"><svg class="i"><use href="#up"/></svg></span>Up one step: every set reached 15.</p>
+    <div class="sets">
+      <div class="row todo"><span class="disc">1</span><span class="val">22.5<small>kg</small><span class="x">×</span>15</span></div>
+      <div class="row todo"><span class="disc">2</span><span class="val">22.5<small>kg</small><span class="x">×</span>15</span></div>
+      <div class="row todo"><span class="disc">3</span><span class="val">22.5<small>kg</small><span class="x">×</span>15</span></div>
+      <div class="row todo"><span class="disc">4</span><span class="val">22.5<small>kg</small><span class="x">×</span>15</span></div>
+    </div>
+    <div class="ex-foot">
+      <div class="setcount"><button class="rb sm" aria-label="Remove set"><svg class="i"><use href="#minus"/></svg></button><span>4 sets</span><button class="rb sm" aria-label="Add set"><svg class="i"><use href="#plus"/></svg></button></div>
+      <button class="mini-btn"><svg class="i"><use href="#pen"/></svg>Note</button>
+      <button class="mini-btn"><svg class="i"><use href="#flag"/></svg>Pain</button>
+    </div>
+  </article>
+
+  <!-- 6 -->
+  <article class="card ex" id="ex6">
+    <div class="ex-head"><span class="num">6</span><h2 class="ex-name">Dumbbell lateral raise, light</h2></div>
+    <div class="sub-row"><span class="target">2 × 15-20</span><span class="pill star"><svg class="i"><use href="#star"/></svg>Side delts</span></div>
+    <p class="last"><span>Last, Wed 11 Nov</span>8 kg × 7, then 5 kg × 9, 9, 9</p>
+    <p class="coach"><span class="cue down"><svg class="i"><use href="#down"/></svg></span>Go lighter: 3 to 4 kg.</p>
+    <div class="sets">
+      <div class="row todo"><span class="disc">1</span><span class="val">4<small>kg</small><span class="x">×</span>9</span></div>
+      <div class="row todo"><span class="disc">2</span><span class="val">4<small>kg</small><span class="x">×</span>9</span></div>
+    </div>
+    <div class="ex-foot">
+      <div class="setcount"><button class="rb sm" aria-label="Remove set"><svg class="i"><use href="#minus"/></svg></button><span>2 sets</span><button class="rb sm" aria-label="Add set"><svg class="i"><use href="#plus"/></svg></button></div>
+      <button class="mini-btn"><svg class="i"><use href="#pen"/></svg>Note</button>
+      <button class="mini-btn"><svg class="i"><use href="#flag"/></svg>Pain</button>
+    </div>
+  </article>
+</main>
+
+<div class="fade" aria-hidden="true"></div>
+<div class="bottom">
+  <div class="dock">
+    <div class="ring"><svg class="r" viewBox="0 0 42 42"><circle cx="21" cy="21" r="17.5" fill="none" stroke="#E5E5E7" stroke-width="5"/><circle cx="21" cy="21" r="17.5" fill="none" stroke="#22C464" stroke-width="5" stroke-linecap="round" stroke-dasharray="96.8 110"/></svg><span class="ic"><svg class="i"><use href="#timer"/></svg></span></div>
+    <div class="rest"><span class="s">Rest</span><span class="t">2:12<small>of 2:30</small></span></div>
+    <button class="btn finish">Finish</button>
+  </div>
+  <nav class="tabs">
+    <a class="tab on"><svg class="i"><use href="#today"/></svg>Today</a>
+    <a class="tab"><svg class="i"><use href="#plan"/></svg>Plan</a>
+    <a class="tab"><svg class="i"><use href="#history"/></svg>History</a>
+    <a class="tab"><svg class="i"><use href="#settings"/></svg>Settings</a>
+  </nav>
+</div>
+<div class="homebar" aria-hidden="true"></div>
+
+<style>.open.demo{display:none}html.open-ex3 .open.demo{display:block}html.open-ex3 .row.demo-hide{display:none}</style>
+<script>
+/* Mockup only: ?at=ex3 shows the page scrolled to exercise 3; ?y=N to N px; ?open=ex3 opens its first set.
+   (A query, not a #hash: headless screenshots go blank after any real scroll.) */
+function place(){
+  var q=new URLSearchParams(location.search), at=q.get('at'), y=null;
+  if(q.get('open')==='ex3') document.documentElement.classList.add('open-ex3');
+  if(at){var el=document.getElementById(at); if(el) y=el.getBoundingClientRect().top+window.scrollY-47-46-12;}
+  else if(q.get('y')){y=parseInt(q.get('y'),10);}
+  if(y!==null){document.querySelector('main').style.transform='translateY('+(-y)+'px)';}
+  document.documentElement.classList.toggle('scrolled',(y||window.scrollY)>90);
+  document.documentElement.setAttribute('data-h',document.documentElement.scrollHeight);
+}
+(document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(place);
+window.addEventListener('scroll',function(){document.documentElement.classList.toggle('scrolled',window.scrollY>90)});
+</script>
+</body>
+</html>
