@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- Lift app icon, look B (LangOS palette). Full bleed and opaque: iOS rounds the corners itself.
+       A chunky white dumbbell raised on its accent lip, tilted up like a lift. Colours: accent #22C464, lip #008D3A, white. -->
+  <rect width="1024" height="1024" fill="#22C464"/>
+  <!-- lip: the same shape 44 units lower -->
+  <g fill="#008D3A" transform="translate(512 534) rotate(-45) scale(1.09) translate(-512 -512)">
+    <rect x="182" y="397" width="64" height="230" rx="32"/>
+    <rect x="778" y="397" width="64" height="230" rx="32"/>
+    <rect x="226" y="312" width="144" height="400" rx="56"/>
+    <rect x="654" y="312" width="144" height="400" rx="56"/>
+    <rect x="350" y="452" width="324" height="120" rx="30"/>
+  </g>
+  <!-- face -->
+  <g fill="#FFFFFF" transform="translate(512 490) rotate(-45) scale(1.09) translate(-512 -512)">
+    <rect x="182" y="397" width="64" height="230" rx="32"/>
+    <rect x="778" y="397" width="64" height="230" rx="32"/>
+    <rect x="226" y="312" width="144" height="400" rx="56"/>
+    <rect x="654" y="312" width="144" height="400" rx="56"/>
+    <rect x="350" y="452" width="324" height="120" rx="30"/>
+  </g>
+</svg>

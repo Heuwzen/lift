@@ -21,6 +21,12 @@
   var manual = null;                  // a set he tapped open: {ex, i}
   var editing = null;                 // a stepper value being typed: {ex, i, f}
   var noteOpen = {};
+  var wake = null;                    // screen wake lock while a rest runs (and 60 s after)
+  function keepAwake(on) {
+    if (!('wakeLock' in navigator)) return;
+    if (on && !wake) { wake = 'asking'; navigator.wakeLock.request('screen').then(function (w) { wake = w; w.addEventListener('release', function () { wake = null; }); }, function () { wake = null; }); }
+    else if (!on && wake && wake.release) { wake.release(); wake = null; }
+  }
 
   /* ---------- sessions ---------- */
   function today() { return L.todayKey(); }
@@ -64,12 +70,14 @@
     var w = new Date(C.written), wk = L.keyOf(w), t = L.keyOf(new Date());
     if (wk === t) return { t: 'Updated today, ' + hm(w), old: false };
     if (wk === L.addDays(t, -1)) return { t: 'Updated yesterday, ' + hm(w), old: false };
-    return { t: 'Last update: ' + L.dayLabel(wk), old: true };
+    return { t: 'Updated ' + L.dayLabel(wk), old: true };
   }
   function lastText(h) {
     var side = h.sets[0].l != null;
-    return esc(L.setsText(h.sets, side).replace(/ x /g, ' × ').replace(/; then /g, ', then '));
+    var t = esc(L.setsText(h.sets, side).replace(/ x /g, ' × ').replace(/; then /g, ', then '));
+    return side ? t.replace(/(left|right) ([\d.]+(?:, [\d.]+)*)/g, '<i>$1 $2</i>') : t;
   }
+
 
   /* ---------- Today ---------- */
   function weekStrip() {
@@ -96,7 +104,7 @@
       ? '<input id="edit" inputmode="decimal" enterkeyhint="done" value="' + esc(num(v)) + '" aria-label="' + cap + '">'
       : '<b data-act="edit" data-ex="' + exId + '" data-i="' + i + '" data-f="' + f + '">' + (f === 'w' && cap === 'Body' && v === 0 ? 'Body' : num(v)) + '</b>';
     return '<div class="stepper' + (wide ? ' wide' : '') + '"><button class="rb" type="button" data-act="dec" data-ex="' + exId + '" data-i="' + i + '" data-f="' + f + '" aria-label="Less ' + cap + '">' + ic('minus') +
-      '</button><output>' + shown + '<small>' + (cap === 'Body' ? 'kg added' : cap) + '</small></output><button class="rb" type="button" data-act="inc" data-ex="' + exId + '" data-i="' + i + '" data-f="' + f + '" aria-label="More ' + cap + '">' + ic('plus') + '</button></div>';
+      '</button><output>' + shown + '<small>' + (cap === 'Body' ? (v === 0 ? 'weight' : 'kg added') : cap) + '</small></output><button class="rb" type="button" data-act="inc" data-ex="' + exId + '" data-i="' + i + '" data-f="' + f + '" aria-label="More ' + cap + '">' + ic('plus') + '</button></div>';
   }
   function exCard(rec, sKey, ex, n, open) {
     var e = entry(rec, sKey, ex);
@@ -136,7 +144,7 @@
   }
   function todayHTML() {
     var sKey = L.sessionKey(C, view.day), s = sKey && C.plan.sessions[sKey], u = updatedText(), st = stage();
-    var h = '<section class="head"><div class="top"><div><h1>' + esc(s ? s.name : 'Rest day') + '</h1><p class="sub">' + esc(s ? s.sub : 'Off') + '</p></div>' +
+    var h = '<section class="head"><div class="top"><div><h1>' + esc(s ? s.name : 'Rest day') + '</h1><p class="sub">' + esc(s ? s.sub : 'No gym today') + '</p></div>' +
       '<div class="when' + (u.old ? ' old' : '') + '"><b>' + L.dayLabel(view.day) + '</b><span><i class="dot"></i>' + esc(u.t) + '</span></div></div>' + weekStrip();
     var note = C.days && C.days[view.day] && C.days[view.day].note;
     var brief = '';
@@ -146,7 +154,7 @@
     if (sKey && C.days && !C.days[view.day]) brief += '<p class="asof">No morning update covers this day. Weights come from last time.</p>';
     if (brief) h += '<div class="card brief">' + brief + '</div>';
     h += '</section>';
-    if (!sKey) return h + '<div class="card restday"><h2>Rest</h2><p>Nothing on the plan today. Missed a session this week? Tap its day above and log it: it counts for today.</p></div>';
+    if (!sKey) return h + '<div class="card restday"><h2>Missed a session?</h2><p>Tap its day above to do it today.</p></div>';
     var rec = sessFor(sKey), open = openSet(rec, sKey);
     if (rec.sent) {
       var inVault = (C.logged || []).indexOf(rec.date) >= 0;
@@ -162,19 +170,19 @@
     var h = '<section class="screen"><h1 class="title">Plan</h1><p class="lede">The gym plan in the vault, as the morning update last copied it.</p>';
     h += '<div class="card block"><h2>Stages</h2><ul class="plist">' + p.stages.map(function (s) {
       var now = s.from <= t && t <= s.to;
-      return '<li><span>' + (now ? '<b style="color:var(--accent-text)">Now: </b>' : '') + esc(s.rule) + '</span><b>' + L.dayLabel(s.from).slice(4) + ' to ' + L.dayLabel(s.to).slice(4) + '</b></li>';
+      return '<li' + (now ? ' class="now"' : '') + '><span>' + (now ? '<b>Now: </b>' : '') + esc(s.rule) + '</span><b>' + L.dayLabel(s.from).slice(4) + ' to ' + L.dayLabel(s.to).slice(4) + '</b></li>';
     }).join('') + '</ul></div>';
     [1, 2, 3, 4, 5, 6].forEach(function (d) {
       var k = p.weekdays[String(d)], s = p.sessions[k];
-      h += '<div class="card block"><h2>' + esc(s.name) + '<small>' + names[d] + ', ' + esc(s.sub.toLowerCase()) + '</small></h2><ul class="plist">' + s.ex.map(function (ex) {
-        return '<li><span>' + (ex.star ? '<span class="star">★ </span>' : '') + esc(ex.name) + (ex.choices ? ' <span style="color:var(--muted)">(' + esc(ex.choices.join(' or ')) + ')</span>' : '') + '</span><b>' + ex.sets + ' × ' + ex.reps[0] + '-' + ex.reps[1] + '</b></li>';
+      h += '<div class="card block"><h2>' + esc(s.name) + '<small>' + names[d] + ', ' + esc(s.sub.toLowerCase()) + '</small>' + (L.sessionKey(C, t) === k ? '<span class="tag-now">Today</span>' : '') + '</h2><ul class="plist">' + s.ex.map(function (ex) {
+        return '<li><span>' + (ex.star ? '<span class="star">★ </span>' : '') + esc(ex.name) + (ex.choices ? ' <span style="color:var(--muted)">(' + esc(ex.choices.join(' or ').toLowerCase()) + ')</span>' : '') + '</span><b>' + ex.sets + ' × ' + ex.reps[0] + '-' + ex.reps[1] + '</b></li>';
       }).join('') + '</ul></div>';
     });
     h += '<div class="card block"><h2>Rules</h2><ul class="plist"><li><span>When every set reaches the top of its range, add the smallest step next time.</span></li><li><span>Rest 2 to 3 minutes on the first two exercises, 60 to 90 seconds on the rest.</span></li><li><span>Leg extension light and slow for the knee.</span></li><li><span>Sunday off.</span></li></ul></div>';
     return h + '</section>';
   }
   function historyHTML() {
-    var h = '<section class="screen"><h1 class="title">History</h1><p class="lede">From the vault, plus sessions on this phone the vault has not read yet.</p>';
+    var h = '<section class="screen"><h1 class="title">History</h1><p class="lede">Last five of each exercise, newest first.</p>';
     var mine = locals().filter(function (r) { return Object.keys(r.ex).some(function (k) { return r.ex[k].sets.some(function (s) { return s.done; }); }); })
       .sort(function (a, b) { return a.date < b.date ? 1 : -1; });
     var logged = C.logged || [];
@@ -182,7 +190,7 @@
       h += '<div class="card block"><h2>On this phone</h2><ul class="hlist">' + mine.slice(0, 8).map(function (r) {
         var inV = logged.indexOf(r.date) >= 0;
         return '<li>' + esc(C.plan.sessions[r.s].name) + ', ' + L.dayLabel(r.date) + '<span>' + (inV ? 'In the vault' : r.sent ? '<i>Sent, not in the vault yet</i>' : '<i>Not sent</i>') + '</span>' +
-          (inV ? '' : '<button class="btn plain" type="button" data-act="resend" data-k="' + esc(r.date + '|' + r.s) + '">' + (r.sent ? 'Send again' : 'Send') + '</button>') + '</li>';
+          (inV ? '' : '<button class="btn ' + (r.sent ? 'plain' : 'go') + '" type="button" data-act="resend" data-k="' + esc(r.date + '|' + r.s) + '">' + (r.sent ? 'Send again' : 'Send') + '</button>') + '</li>';
       }).join('') + '</ul></div>';
     }
     var seen = {};
@@ -193,7 +201,7 @@
         seen[ex.id] = 1;
         var list = L.historyOf(C, locals(), ex.id, null).slice(0, 5);
         h += '<div class="card block"><h2>' + esc(ex.name) + '</h2>' + (list.length ? '<ul class="hlist">' + list.map(function (x) {
-          return '<li>' + lastText(x) + '<span>' + L.dayLabel(x.date) + (x.choice ? ', ' + esc(x.choice.toLowerCase()) : '') + (x.local ? ', <i>on this phone</i>' : '') + (x.note ? '. ' + esc(x.note) : '') + '</span></li>';
+          return '<li>' + lastText(x) + '<span>' + L.dayLabel(x.date) + (x.choice ? ', ' + esc(x.choice.toLowerCase()) : '') + (x.local ? ', on this phone' : '') + (x.note ? '<br>' + esc(x.note) : '') + '</span></li>';
         }).join('') + '</ul>' : '<p class="empty">Not done yet.</p>') + '</div>';
       });
     });
@@ -204,7 +212,7 @@
     var h = '<section class="screen"><h1 class="title">Settings</h1>';
     h += '<div class="card block"><h2>Morning update</h2><div class="kv"><span>Content</span><b>' + esc(u.t) + '</b></div><div class="kv"><span>Covers</span><b>' + (C.from ? L.dayLabel(C.from) + ' to ' + L.dayLabel(L.addDays(C.from, 6)) : 'nothing yet') + '</b></div>' +
       '<button class="btn plain" type="button" data-act="refresh">Check for an update</button></div>';
-    h += '<div class="card block"><h2>Today\'s session</h2><p class="empty">Wipes the sets logged on this phone today. Sessions already in the vault stay there.</p><button class="btn plain" type="button" data-act="wipe">Clear today\'s sets</button></div>';
+    h += '<div class="card block"><h2>Today\'s session</h2><p class="empty">Wipes the sets logged on this phone today. Sessions already in the vault stay there.</p><button class="btn plain danger" type="button" data-act="wipe">Clear today\'s sets</button></div>';
     if (!standalone) h += '<div class="card block"><h2>Install</h2><p class="empty">In Safari: Share, then Add to Home Screen. Open Lift from that icon: it then works with no signal. A Private tab forgets your sets.</p></div>';
     return h + '<p class="lede" style="padding-bottom:8px">Lift, made for Arda. Sends nothing by itself: only the report you send to Telegram.</p></section>';
   }
@@ -243,13 +251,20 @@
   function fmt(s) { s = Math.max(0, Math.ceil(s)); return Math.floor(s / 60) + ':' + pad(s % 60); }
   function dock() {
     if (!C) return;
+    var sKey = L.sessionKey(C, view.day), c = counts(sKey), rec = sKey && sessFor(sKey);
     var left = T ? (T.end - Date.now()) / 1000 : 0, ring = $('ring');
+    var hide = !sKey && !(T && left > 0);
+    $('dock').hidden = hide;
+    document.documentElement.style.setProperty('--bottom-h', hide ? '64px' : '130px');
+    keepAwake(!!T && left > -60);
+    if (hide) return;
+    $('dock').classList.toggle('over', !!T && left <= 0 && left > -60);
+    $('finish').classList.toggle('ready', c.all > 0 && c.done === c.all && !(rec && rec.sent));
     if (T && left > 0) {
       $('dock-s').textContent = 'Rest';
       $('dock-t').innerHTML = fmt(left) + '<small>of ' + fmt(T.total) + '</small>';
       ring.setAttribute('stroke-dasharray', (110 * left / T.total).toFixed(1) + ' 110');
     } else {
-      var c = counts(L.sessionKey(C, view.day));
       $('dock-s').textContent = T && left > -60 ? 'Rest over' : 'Sets';
       $('dock-t').innerHTML = c.done + '<small>of ' + c.all + '</small>';
       ring.setAttribute('stroke-dasharray', (c.all ? 110 * c.done / c.all : 0).toFixed(1) + ' 110');
@@ -278,14 +293,17 @@
     o.rec.end = now;
     touch(o.rec, o.ex, o.e); save(o.rec);
     manual = null;
-    if (!wasDone) {
+    var next = openSet(o.rec, o.sKey);
+    if (!wasDone && next) {
       var idx = exList(o.sKey).indexOf(o.ex);
       T = { end: now + (idx < 2 ? C.plan.rest.first : C.plan.rest.other) * 1000, total: idx < 2 ? C.plan.rest.first : C.plan.rest.other };
       wr(K.timer, T);
-    }
+    } else if (!next) { T = null; wr(K.timer, null); }   // no rest after the last set
     render(true);
-    var next = openSet(o.rec, o.sKey);
-    if (next && next.ex !== exId) { var el = $('ex-' + next.ex); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    if (next) {
+      var el = next.ex !== exId ? $('ex-' + next.ex) : document.querySelector('#ex-' + exId + ' .open');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: next.ex !== exId ? 'start' : 'nearest' });
+    }
   }
   function commitEdit() {
     var inp = $('edit');
@@ -367,10 +385,9 @@
     var h = '<div class="scrim" data-x="close"></div><div class="sheet" role="dialog" aria-label="Finish"><h2>' + (any ? 'Send this session' : 'Nothing logged yet') + '</h2>';
     if (any) {
       h += '<p class="sub">It goes to your Telegram bot, which writes it into the Gym Log.</p><pre>' + esc(text) + '</pre>';
-      if (bot) h += '<a class="btn go" id="send" href="tg://resolve?domain=' + encodeURIComponent(bot) + '&text=' + encodeURIComponent(text) + '">' + ic('check') + 'Send to Telegram</a>';
-      h += '<div class="two"><button class="btn plain" type="button" data-x="copy">Copy</button>' + (navigator.share ? '<button class="btn plain" type="button" data-x="share">Share</button>' : '<button class="btn plain" type="button" data-x="close">Close</button>') + '</div>';
-      if (navigator.share) h += '<button class="btn plain" type="button" data-x="close">Back</button>';
-    } else h += '<p class="sub">Tap Done on a set first.</p><button class="btn plain" type="button" data-x="close">Back</button>';
+      if (bot) h += '<a class="btn go" id="send" href="tg://resolve?domain=' + encodeURIComponent(bot) + '&text=' + encodeURIComponent(text) + '">' + ic('send') + 'Send to Telegram</a>';
+      h += '<div class="two">' + (navigator.share ? '<button class="btn plain" type="button" data-x="share">Share</button>' : '<button class="btn plain" type="button" data-x="copy">Copy</button>') + '<button class="btn plain" type="button" data-x="close">Close</button></div>';
+    } else h += '<p class="sub">Tap Done on a set first.</p><button class="btn plain" type="button" data-x="close">Close</button>';
     $('layer').innerHTML = h + '</div>';
     function mark() { rec.sent = true; rec.sentAt = Date.now(); save(rec); }
     var send = $('send');
@@ -409,7 +426,7 @@
     if (view.tab !== 'today' || !C) return;
     var sKey = L.sessionKey(C, view.day), o = sKey && openSet(sessFor(sKey), sKey);
     var el = o && document.querySelector('#ex-' + o.ex + ' .open');
-    if (el && (o.ex !== exList(sKey)[0].id || o.i > 0)) el.scrollIntoView({ block: 'center' });
+    if (el) el.scrollIntoView({ block: o.ex !== exList(sKey)[0].id || o.i > 0 ? 'center' : 'nearest' });
   }
   render();
   toOpen();

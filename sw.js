@@ -1,7 +1,7 @@
 // Lift offline cache. A gym has weak signal, so the app itself opens from the cache at once and refreshes in the
 // background (a new version shows on the next open). data.json is not cached here: app.js keeps the last sealed
 // copy in the phone's storage, shows it at once and fetches a newer one behind it.
-const CACHE = 'lift-dev';
+const CACHE = 'lift-895172fbed';
 const ASSETS = ['./', './index.html', './style.css', './logic.js', './app.js', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
